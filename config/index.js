@@ -1,20 +1,27 @@
 'use strict'
-// Template version: 1.3.1
-// see http://vuejs-templates.github.io/webpack for documentation.
-
 const path = require('path')
-
+const cnode = "https://cnodejs.org";
+const bescer = "https://www.bestcake.com";
+const local = "http://127.0.0.1"
 module.exports = {
   dev: {
-
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+       '/apis': {
+         target: local, // 需要进行代理跨域主机
+         secure: true, // 如果是https接口，需要配置这个参数
+         changeOrigin: true, //是否跨域
+         pathRewrite: {
+           '^/apis': '' //请求结束 将url里面 /apis重写成"" https://cnodejs.org/api/v1/topics
+         }
+       }
+    },
 
     // Various Dev Server settings
     host: '0.0.0.0', // can be overwritten by process.env.HOST
-    port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    port: 9090, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: true,
@@ -43,7 +50,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: './',
 
     /**
      * Source Maps

@@ -1,23 +1,28 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
 <script>
+import axios from "axios";
 export default {
-  name: 'App'
-}
+  name: "App",
+  mounted() {
+    this.$apis.getPhp().then((res)=>{
+      console.log(res)
+    })
+  }
+};
 </script>
 
 <style lang="scss">
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 70px;
+  margin-top: 30+30px;
 }
 </style>
