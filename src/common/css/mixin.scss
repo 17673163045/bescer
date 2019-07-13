@@ -94,7 +94,7 @@
 }
 
 // flexbal
-$fontSize:75;
+$fontSize:54;
 @function r($px){
 	@return $px/$fontSize+rem;
 }
