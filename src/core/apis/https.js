@@ -1,8 +1,8 @@
 //定义公共请求配置部分
 import axios from "axios"
-// const baseURL = location.host.indexOf(".com") != -1 ? "" : "/apis";
+const baseURL = location.host.indexOf(".com") != -1 ? "" : "/apis";
 var instance = axios.create({
-  baseURL:"/apis",
+  baseURL: baseURL,
   timeout: 20000,
   // 跨域  
   withCredentials: true,
@@ -17,3 +17,22 @@ var instance = axios.create({
   responseType: 'json'
 })
 export default instance
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
