@@ -7,11 +7,11 @@
         <li class="shopgoodsItem" v-for="(item,index) in GoodsList" :key="index">
           <div class="selectBox">
             <label class="selectLabel" for="checkBtn">
-              <input class="selectBtn" type="checkbox" id="checkBtn" value />
+              <input class="selectBtn" type="checkbox" id="checkBtn" value>
             </label>
           </div>
           <div class="itemImgBox">
-            <img class="itemImg" :src="item.ImgUrl" alt />
+            <img class="itemImg" :src="item.ImgUrl" alt>
           </div>
           <div class="itemDetail">
             <p class="itemName" v-text="item.Name"></p>
@@ -34,19 +34,19 @@
         </div>
         <div class="hotProductItem">
           <div class="item">
-            <img src="https://res.bestcake.com\m-images\cart\mw_firm_sq.jpg" class="itemImg" />
+            <img src="https://res.bestcake.com\m-images\cart\mw_firm_sq.jpg" class="itemImg">
             <p class="itemTitle">伴手礼系列-吉致生巧</p>
             <span class="itemPrice">168.00</span>
             <span class="itemSize">/1盒</span>
           </div>
           <div class="item">
-            <img src="https://res.bestcake.com\m-images\cart\mw_firm_nzt_v1.jpg" class="itemImg" />
+            <img src="https://res.bestcake.com\m-images\cart\mw_firm_nzt_v1.jpg" class="itemImg">
             <p class="itemTitle">伴手礼系列-吉致牛轧糖</p>
             <span class="itemPrice">68.00</span>
             <span class="itemSize">/16粒装</span>
           </div>
           <div class="item">
-            <img src="https://res.bestcake.com\m-images\cart\mw_firm_pf_v1.jpg" class="itemImg" />
+            <img src="https://res.bestcake.com\m-images\cart\mw_firm_pf_v1.jpg" class="itemImg">
             <p class="itemTitle">伴手礼系列-吉致泡芙</p>
             <span class="itemPrice">88.00</span>
             <span class="itemSize">/0.8磅</span>
@@ -54,7 +54,32 @@
         </div>
       </div>
     </section>
-div.
+    <!-- 结算部分 -->
+    <div class="footCount">
+      <div class="allcheckBox">
+        <label class="selectLabel" for="allChecked">
+          <input class="selectBtn" type="checkbox" id="allChecked">
+        </label>
+      </div>
+      <!-- 全选框 -->
+      <div class="allCheckTxt txt">全选</div>
+      <!-- 清空框 -->
+      <div class="clearTxt txt">清空</div>
+      <div class="countPrice">
+        <div class="countNumBox">
+          <!-- 总价框 -->
+          <span class="countNum countitem">0.00</span>
+          <span class="countTxt countitem">合计&nbsp;:</span>
+        </div>
+        <div class="countNumBox">
+          <!-- 优惠框 -->
+          <span class="discountNum countitem">0.00</span>
+          <span class="discountTxt countitem">已优惠&nbsp;:</span>
+        </div>
+      </div>
+      <!-- 结算按钮 -->
+      <div class="countBtn">结算</div>
+    </div>
   </div>
 </template>
 
@@ -63,12 +88,15 @@ export default {
   data() {
     return {
       //定义初始化数据:
-      GoodsList: [], //渲染商品的数组列表
+      GoodsList: [] //渲染商品的数组列表
     };
   },
   created() {
-    this.GoodsList = JSON.parse(window.localStorage.getItem("shopCarList"));
-  }
+    this.GoodsList = JSON.parse(
+      window.localStorage.getItem("shopCarList") || "[]"
+    );
+  },
+  watch: {}
 };
 </script>
 
@@ -78,9 +106,75 @@ export default {
   flex-wrap: wrap;
   width: r(375);
   height: auto;
+  margin: 0 auto;
 }
-#shopTag section{
+#shopTag section {
+  height: auto;
+  overflow: hidden;
+  margin-bottom: r(60);
+}
+//结算部分
+.footCount {
+  display: flex;
+  align-items: center;
+  height: r(60);
+  width: r(375);
+  margin: 0 auto;
+  position: fixed;
+  background-color: #fff;
+  z-index: 999;
+  bottom: r(60);
+}
+.allcheckBox {
+  padding: 0 r(6) 0 r(16);
+  display: flex;
+  align-items: center;
+}
+.allCheckTxt {
+  font-size: r(16);
+  height: r(50);
+  line-height: r(50);
+}
+.footCount .clearTxt {
+  font-size: r(14);
+  height: r(50);
+  line-height: r(50);
+  padding: 0 r(10);
+}
 
+.countPrice {
+  width: r(150);
+  height: r(50);
+}
+.countNumBox {
+  height: r(25);
+  width: 100%;
+}
+.countPrice .countitem {
+  height: r(25);
+  line-height: r(25);
+  float: right;
+  padding-right:r(6);
+  margin-right: r(4);
+}
+.countNumBox .countNum {
+  color: #f2495e;
+  font-size: r(16);
+  font-weight: bold;
+}
+.countNumBox .discountNum {
+  font-size: r(12);
+  font-weight: bold;
+}
+
+.countBtn {
+  flex: 1;
+  height: r(60);
+  background-color: #02d4d7;
+  color:#fff;
+  line-height:r(60);
+  text-align:center;
+  font-size:r(18)
 }
 .empty {
   height: r(60);
@@ -237,5 +331,4 @@ export default {
 .hotProductItem .item .itemSize {
   font-size: r(12);
 }
-
 </style>
