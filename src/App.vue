@@ -4,7 +4,7 @@
       <router-view v-if="$route.meta.keepAlive"></router-view>
     </keep-alive>
     <router-view v-if="!$route.meta.keepAlive"></router-view>
-    <div class="box" v-if="$route.meta.bool"></div>
+    <bottomToggle></bottomToggle>
   </div>
 </template>
 
@@ -12,16 +12,15 @@
 export default {
   name: "App",
   data() {
-    return {
-    };
+    return {};
   }
 };
 </script>
 
 <style lang="scss">
-.box{
-  width:100px;
-  height:100px;
-  background-color:red;
+.box {
+  width: 100px;
+  height: 100px;
+  background-color: red;
 }
 </style>

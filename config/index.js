@@ -1,7 +1,7 @@
 'use strict'
 const path = require('path')
 const cnode = "https://cnodejs.org";
-const bescer = "https://www.bestcake.com";
+const bescer = "https://m.bestcake.com";
 const local = "http://127.0.0.1"
 module.exports = {
   dev: {
@@ -10,7 +10,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
        '/apis': {
-         target: local, // 需要进行代理跨域主机
+         target:bescer, // 需要进行代理跨域主机
          secure: true, // 如果是https接口，需要配置这个参数
          changeOrigin: true, //是否跨域
          pathRewrite: {

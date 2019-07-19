@@ -11,22 +11,25 @@ import router from './router';
 import core from "@/core/core.config";
 Vue.use(core);
 
+//vuex全局仓库
+import store from '@/core/store'
+
 //淘宝响应式框架
 import 'lib-flexible/flexible.js'
 
 //mock模拟数据
 
 
-//vuex
-
-
-//
-
+//mint-ui
+import MintUI from 'mint-ui'
+import 'mint-ui/lib/style.css'
+Vue.use(MintUI)
 
 Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

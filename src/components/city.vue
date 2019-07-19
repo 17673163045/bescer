@@ -1,7 +1,7 @@
 <!--这是城市选择组件-->
 <template>
-  <div id="">
-
+  <div id="citys">
+    
   </div>
 </template>
 
@@ -17,6 +17,6 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   
 </style>

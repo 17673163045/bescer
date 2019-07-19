@@ -1,12 +1,10 @@
 <!--这是商品展示组件,包含蛋糕,西点,大礼包-->
 <template>
   <div id="goodsList">
-    <p>商品列表</p>
-    <ul>
-      <li v-for="(item,index) in goodsList" :key=index>
-        <router-link :to="item.path">{{item.name}}</router-link>
-      </li>
-    </ul>
+    <div class="item" v-for="(item,index) in imgList" :key="index">
+      <img :src="item.ImgUrl" class="itmeImg">
+      <p class="actName" v-text="item.ActName"></p>
+    </div>
   </div>
 </template>
 
@@ -14,29 +12,33 @@
 export default {
   data() {
     return {
-      goodsList:[]
+
     };
   },
-  created() {
-    this.$apis.goodsList().then((res)=>{
-      console.log("请求1次")
-      this.goodsList = res.data
-    })
-  }   
+  props:["imgList"]
 };
 </script>
 
-<style lang="scss">
-  a:active{
-    color:#000;
-  }
-  a:link{
-    color:#000;
-  }
-  a:visited{
-    color:#000
-  }
-  a:hover{
-    color:#f90
-  }
+<style lang="scss" scoped>
+#goodsList{
+  margin:0 auto;
+  text-align:center;
+  width:r(343);
+  height:r(220);
+  padding:r(20) r(0);
+  display: flex;
+  flex-wrap: wrap;
+}
+.item{
+  font-size:r(12);
+  height:r(90);
+  width:25%;
+}
+.itmeImg{
+  height:r(50)
+}
+.actName{
+  padding:r(10) 0;
+  white-space: nowrap;
+}
 </style>

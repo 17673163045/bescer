@@ -2,9 +2,10 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import app from "@/App";  //app,顶级组件
 import home from '@/components/home' //主页
-import bottomToggle from "@/components/bottomToggle"; //底部导航栏
-import usermy from "@/components/usermy";  //用户"我的"
-import goodsList from "@/components/goodsList";//商品详情
+import usermy from "@/components/usermy";  //用户"我的"页面
+import goodsClassify from "@/components/goodsClassify"; //商品分类页面
+import shopTag from "@/components/shopTag"; //购物车页面
+import goodsDetail from "@/components/goodsDetail"; //商品详情页面
 
 Vue.use(Router)
 
@@ -24,11 +25,19 @@ export default new Router({
       component:usermy
     },
     {
-      path:"/goodsList",
-      component:goodsList,
+      path: "/goodsClassify",
+      component: goodsClassify,
       meta:{
         bool:true
       }
+    },
+    {
+      path:"/shopTag",
+      component:shopTag
+    },
+    {
+      path:"/detail",
+      component: goodsDetail
     }
   ]
 })
