@@ -6,69 +6,61 @@
         <!-- 购物商品展示开始 -->
         <li class="shopgoodsItem" v-for="(item,index) in GoodsList" :key="index">
           <div class="selectBox">
-            <label class="selectLabel" for="checkBtn">
-              <input class="selectBtn" type="checkbox" id="checkBtn" value>
+            <label
+              class="selectLabel"
+              :class="{'current':toggleClass(item)}"
+              :for="'checkBtn'+index"
+            >
+              <input
+                class="selectBtn"
+                type="checkbox"
+                :id="'checkBtn'+index"
+                :value="item.id"
+                v-model="selectList"
+                @change="isAllSelect"
+              />
             </label>
           </div>
           <div class="itemImgBox">
-            <img class="itemImg" :src="item.ImgUrl" alt>
+            <img class="itemImg" :src="item.ImgUrl" alt />
           </div>
           <div class="itemDetail">
             <p class="itemName" v-text="item.Name"></p>
             <p class="itemSize" v-text="item.Size">1.2磅</p>
-            <p class="itemPrice" v-text="item.Price + '.00'">118.00</p>
+            <p class="itemPrice" v-text="item.Price * item.Num + '.00'"></p>
           </div>
           <div class="addGoods">
-            <span class="sub iconfont icon-jian"></span>
-            <span class="GoodsNum">1</span>
-            <span class="add iconfont icon-jiahao1"></span>
+            <span class="sub iconfont icon-jian" @click="subGoodsNum(item)"></span>
+            <span class="GoodsNum" v-text="item.Num"></span>
+            <span class="add iconfont icon-jiahao1" @click="addGoodsNum(item)"></span>
           </div>
           <div class="bg"></div>
         </li>
         <!-- 购物商品展示结束 -->
       </ul>
-      <div class="hotProduct">
-        <div class="hotTitle">
-          <div class="titleTXtEN">Hot Recommend</div>
-          <div class="titleTXtCH">热销新品推荐</div>
-        </div>
-        <div class="hotProductItem">
-          <div class="item">
-            <img src="https://res.bestcake.com\m-images\cart\mw_firm_sq.jpg" class="itemImg">
-            <p class="itemTitle">伴手礼系列-吉致生巧</p>
-            <span class="itemPrice">168.00</span>
-            <span class="itemSize">/1盒</span>
-          </div>
-          <div class="item">
-            <img src="https://res.bestcake.com\m-images\cart\mw_firm_nzt_v1.jpg" class="itemImg">
-            <p class="itemTitle">伴手礼系列-吉致牛轧糖</p>
-            <span class="itemPrice">68.00</span>
-            <span class="itemSize">/16粒装</span>
-          </div>
-          <div class="item">
-            <img src="https://res.bestcake.com\m-images\cart\mw_firm_pf_v1.jpg" class="itemImg">
-            <p class="itemTitle">伴手礼系列-吉致泡芙</p>
-            <span class="itemPrice">88.00</span>
-            <span class="itemSize">/0.8磅</span>
-          </div>
-        </div>
-      </div>
+      <HotProduct></HotProduct>
     </section>
     <!-- 结算部分 -->
     <div class="footCount">
       <div class="allcheckBox">
-        <label class="selectLabel" for="allChecked">
-          <input class="selectBtn" type="checkbox" id="allChecked">
+        <!-- 全选框 -->
+        <label class="selectLabel" :class="{'current':isSelectAll}" for="allChecked">
+          <input
+            class="selectBtn"
+            type="checkbox"
+            id="allChecked"
+            v-model="isSelectAll"
+            @change="selectAll"
+          />
         </label>
       </div>
-      <!-- 全选框 -->
       <div class="allCheckTxt txt">全选</div>
       <!-- 清空框 -->
-      <div class="clearTxt txt">清空</div>
+      <div class="clearTxt txt" @click="removeAll">清空</div>
       <div class="countPrice">
         <div class="countNumBox">
           <!-- 总价框 -->
-          <span class="countNum countitem">0.00</span>
+          <span class="countNum countitem" v-text="totalPrice + '.00'"></span>
           <span class="countTxt countitem">合计&nbsp;:</span>
         </div>
         <div class="countNumBox">
@@ -84,19 +76,140 @@
 </template>
 
 <script>
+import HotProduct from "@/components/HotProduct";
 export default {
   data() {
     return {
       //定义初始化数据:
-      GoodsList: [] //渲染商品的数组列表
+      GoodsList: [], //渲染商品的数组列表,从localstorage获取
+
+      //定义逻辑数据
+      selectList: [], //勾选的商品,双向绑定单选框的value,value绑定为item.id
+      isSelectAll: false //双向绑定全选框
     };
   },
   created() {
+    //给GoodsList赋值
     this.GoodsList = JSON.parse(
       window.localStorage.getItem("shopCarList") || "[]"
     );
+    //查询选中商品
+    this.selectList = JSON.parse(window.localStorage.getItem("selectedGoods"));
+    //初始化查询是否所有都选中
+    this.isAllSelect();
   },
-  watch: {}
+  computed: {
+    //计算总价
+    totalPrice() {
+      let totalPrice = 0;
+      this.selectList.forEach(el => {
+        this.GoodsList.forEach(item => {
+          if (el == item.id) {
+            totalPrice += item.Price * item.Num;
+          }
+        });
+      });
+      return totalPrice;
+    }
+  },
+  watch: {
+
+  },
+  methods: {
+    //添加商品的数量,最多20个,绑给加号按钮
+    addGoodsNum(item) {
+      if (item.Num >= 20) {
+        return;
+      }
+      item.Num++;
+      window.localStorage.setItem(
+        "shopCarList",
+        JSON.stringify(this.GoodsList)
+      );
+    },
+    //减少商品数量,减到0删除商品,并更新localstorage,绑给减号按钮
+    subGoodsNum(item) {
+      if (item.Num <= 1) {
+        if (confirm("确认要删除商品吗")) {
+          this.GoodsList.forEach((el, index) => {
+            if (el.id == item.id) {
+              this.GoodsList.splice(index, 1);
+              window.localStorage.setItem(
+                "shopCarList",
+                JSON.stringify(this.GoodsList)
+              );
+            }
+          });
+          this.selectList.forEach((element, index) => {
+            if (element == item.id) {
+              this.selectList.splice(index, 1);
+              console.log(this.selectList);
+            }
+          });
+        }
+        return;
+      }
+      item.Num--;
+      window.localStorage.setItem(
+        "shopCarList",
+        JSON.stringify(this.GoodsList)
+      );
+    },
+    //全选按钮选中所有商品的函数,绑给全选框
+    selectAll() {
+      if (!this.GoodsList.length) {
+        this.isSelectAll = false;
+        return false;
+      }
+      if (this.isSelectAll) {
+        this.selectList.length = 0; //全选时进来先清空单选
+        this.GoodsList.forEach(el => {
+          this.selectList.push(el.id);
+        });
+      } else {
+        for (var i = 0; i < this.GoodsList.length; i++) {
+          this.selectList.pop();
+        }
+      }
+    },
+    //判断是否全部选中的函数,绑给每个单选框
+    isAllSelect() {
+      window.localStorage.setItem("selectedGoods",JSON.stringify(this.selectList))
+      if (this.selectList.length == this.GoodsList.length) {
+        this.isSelectAll = true;
+      } else {
+        this.isSelectAll = false;
+      }
+    },
+    //给选中状态的框添加或移除current类名,返回true或false,通过:class来控制
+    toggleClass(item) {
+      var flag = false;
+      this.selectList.forEach(el => {
+        if (item.id == el) {
+          flag = true;
+        }
+      });
+      return flag;
+    },
+    //清空所有商品
+    removeAll() {
+      //如果本来是空的,return,节省性能.
+      if (!this.GoodsList.length) {
+        return;
+      }
+      this.GoodsList = [];
+      window.localStorage.setItem("shopCarList", this.GoodsList);
+      this.selectList = [];
+      this.isSelectAll = false;
+    },
+    //记住选中状态的函数,结算时要得到选中的商品再结算
+    getSelected() {
+      window.setItem("selectedGoods",JSON.stringify(this.selectList))
+    }
+  },
+  components: {
+    HotProduct
+  }
 };
 </script>
 
@@ -113,69 +226,7 @@ export default {
   overflow: hidden;
   margin-bottom: r(60);
 }
-//结算部分
-.footCount {
-  display: flex;
-  align-items: center;
-  height: r(60);
-  width: r(375);
-  margin: 0 auto;
-  position: fixed;
-  background-color: #fff;
-  z-index: 999;
-  bottom: r(60);
-}
-.allcheckBox {
-  padding: 0 r(6) 0 r(16);
-  display: flex;
-  align-items: center;
-}
-.allCheckTxt {
-  font-size: r(16);
-  height: r(50);
-  line-height: r(50);
-}
-.footCount .clearTxt {
-  font-size: r(14);
-  height: r(50);
-  line-height: r(50);
-  padding: 0 r(10);
-}
 
-.countPrice {
-  width: r(150);
-  height: r(50);
-}
-.countNumBox {
-  height: r(25);
-  width: 100%;
-}
-.countPrice .countitem {
-  height: r(25);
-  line-height: r(25);
-  float: right;
-  padding-right:r(6);
-  margin-right: r(4);
-}
-.countNumBox .countNum {
-  color: #f2495e;
-  font-size: r(16);
-  font-weight: bold;
-}
-.countNumBox .discountNum {
-  font-size: r(12);
-  font-weight: bold;
-}
-
-.countBtn {
-  flex: 1;
-  height: r(60);
-  background-color: #02d4d7;
-  color:#fff;
-  line-height:r(60);
-  text-align:center;
-  font-size:r(18)
-}
 .empty {
   height: r(60);
   line-height: r(60);
@@ -204,9 +255,14 @@ export default {
 }
 .selectBtn {
   height: r(20);
+  position: absolute;
+  top: 20px;
+  left: 0;
   visibility: hidden;
 }
 .selectLabel {
+  position: relative;
+  overflow: hidden;
   width: r(20);
   height: r(20);
   background: url("https://res.bestcake.com/m-images/order/mw_firm_duihao_2.jpg")
@@ -279,56 +335,67 @@ export default {
   height: r(10);
   width: 100%;
 }
-//购物商品结束
-.hotTitle {
-  height: r(240);
-  background-color: rgb(244, 244, 244);
-  padding-top: r(130);
-  text-align: center;
-}
-.hotTitle .titleTXtEN {
-  display: inline-block;
-  height: r(40);
-  line-height: r(40);
-  font-size: r(22);
-  font-weight: bold;
-  color: #222;
-  // padding:r(2) 0;
-  border-bottom: 2px solid #222;
-}
-.hotTitle .titleTXtCH {
-  height: r(26);
-  line-height: r(26);
-  color: #222;
-  font-size: r(15);
-  font-weight: bold;
-}
-.hotProductItem {
-  width: r(375);
-  padding: 0 r(16);
-  margin: 0 auto;
+//结算部分
+.footCount {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  align-items: center;
+  height: r(60);
+  width: r(375);
+  margin: 0 auto;
+  position: fixed;
+  background-color: #fff;
+  z-index: 999;
+  bottom: r(60);
 }
-.hotProductItem .item {
-  width: 49%;
-  height: r(230);
-  margin-bottom: r(10);
+.allcheckBox {
+  padding: 0 r(6) 0 r(16);
+  display: flex;
+  align-items: center;
 }
-.hotProductItem .item .itemImg {
+.allCheckTxt {
+  font-size: r(16);
+  height: r(50);
+  line-height: r(50);
+}
+.footCount .clearTxt {
+  font-size: r(14);
+  height: r(50);
+  line-height: r(50);
+  padding: 0 r(10);
+}
+
+.countPrice {
+  width: r(150);
+  height: r(50);
+}
+.countNumBox {
+  height: r(25);
   width: 100%;
 }
-.hotProductItem .item .itemTitle {
-  font-size: r(14);
-  font-weight: 600;
-  padding: r(4) 0;
+.countPrice .countitem {
+  height: r(25);
+  line-height: r(25);
+  float: right;
+  padding-right: r(6);
+  margin-right: r(4);
 }
-.hotProductItem .item .itemPrice {
-  font-size: r(12);
-  font-weight: 600;
+.countNumBox .countNum {
+  color: #f2495e;
+  font-size: r(16);
+  font-weight: bold;
 }
-.hotProductItem .item .itemSize {
+.countNumBox .discountNum {
   font-size: r(12);
+  font-weight: bold;
+}
+
+.countBtn {
+  flex: 1;
+  height: r(60);
+  background-color: #02d4d7;
+  color: #fff;
+  line-height: r(60);
+  text-align: center;
+  font-size: r(18);
 }
 </style>

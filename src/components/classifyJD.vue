@@ -30,14 +30,6 @@ export default {
   mounted() {},
 
   watch: {
-    aaa: {
-      handler(newobj) {
-        console.log(newobj);
-        console.log(JSON.parse(window.localStorage.getItem("shopCarList")));
-      },
-      immediate: true,
-      deep: true
-    }
   },
   methods: {
     ...mapMutations(["addByicon"]),
