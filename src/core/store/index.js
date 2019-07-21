@@ -11,7 +11,7 @@ const mutations = {
   //点击购物车小图标购买逻辑
   addByicon(state, data) {
     let ShopGoodsobj = {
-      id: data.ID || data.Id,
+      id: data.ID || data.Id || data.iD,
       Name: data.Name,
       Price: data.CurrentPrice,
       Num: 1,

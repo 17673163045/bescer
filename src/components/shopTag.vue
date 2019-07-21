@@ -18,11 +18,11 @@
                 :value="item.id"
                 v-model="selectList"
                 @change="isAllSelect"
-              />
+              >
             </label>
           </div>
           <div class="itemImgBox">
-            <img class="itemImg" :src="item.ImgUrl" alt />
+            <img class="itemImg" :src="item.ImgUrl" alt>
           </div>
           <div class="itemDetail">
             <p class="itemName" v-text="item.Name"></p>
@@ -51,7 +51,7 @@
             id="allChecked"
             v-model="isSelectAll"
             @change="selectAll"
-          />
+          >
         </label>
       </div>
       <div class="allCheckTxt txt">全选</div>
@@ -85,7 +85,7 @@ export default {
 
       //定义逻辑数据
       selectList: [], //勾选的商品,双向绑定单选框的value,value绑定为item.id
-      isSelectAll: false //双向绑定全选框
+      isSelectAll: "" //双向绑定全选框
     };
   },
   created() {
@@ -94,8 +94,11 @@ export default {
       window.localStorage.getItem("shopCarList") || "[]"
     );
     //查询选中商品
-    this.selectList = JSON.parse(window.localStorage.getItem("selectedGoods"));
+    this.selectList = JSON.parse(
+      window.localStorage.getItem("selectedGoods") || "[]"
+    );
     //初始化查询是否所有都选中
+    this.SelectedInit();
     this.isAllSelect();
   },
   computed: {
@@ -112,9 +115,7 @@ export default {
       return totalPrice;
     }
   },
-  watch: {
-
-  },
+  watch: {},
   methods: {
     //添加商品的数量,最多20个,绑给加号按钮
     addGoodsNum(item) {
@@ -134,6 +135,10 @@ export default {
           this.GoodsList.forEach((el, index) => {
             if (el.id == item.id) {
               this.GoodsList.splice(index, 1);
+              if (!this.GoodsList.length) {
+                this.isSelectAll = false;
+              }
+              this.$store.state.shopCarList = this.GoodsList;
               window.localStorage.setItem(
                 "shopCarList",
                 JSON.stringify(this.GoodsList)
@@ -143,7 +148,10 @@ export default {
           this.selectList.forEach((element, index) => {
             if (element == item.id) {
               this.selectList.splice(index, 1);
-              console.log(this.selectList);
+              window.localStorage.setItem(
+                "selectedGoods",
+                JSON.stringify(this.selectList)
+              );
             }
           });
         }
@@ -155,7 +163,7 @@ export default {
         JSON.stringify(this.GoodsList)
       );
     },
-    //全选按钮选中所有商品的函数,绑给全选框
+    //全选,反选的函数,绑给全选框
     selectAll() {
       if (!this.GoodsList.length) {
         this.isSelectAll = false;
@@ -166,16 +174,30 @@ export default {
         this.GoodsList.forEach(el => {
           this.selectList.push(el.id);
         });
+        window.localStorage.setItem(
+          "selectedGoods",
+          JSON.stringify(this.selectList)
+        );
       } else {
         for (var i = 0; i < this.GoodsList.length; i++) {
           this.selectList.pop();
         }
+        window.localStorage.setItem(
+          "selectedGoods",
+          JSON.stringify(this.selectList)
+        );
       }
     },
     //判断是否全部选中的函数,绑给每个单选框
     isAllSelect() {
-      window.localStorage.setItem("selectedGoods",JSON.stringify(this.selectList))
-      if (this.selectList.length == this.GoodsList.length) {
+      window.localStorage.setItem(
+        "selectedGoods",
+        JSON.stringify(this.selectList)
+      );
+      if (
+        this.selectList.length == this.GoodsList.length &&
+        this.selectList.length != 0
+      ) {
         this.isSelectAll = true;
       } else {
         this.isSelectAll = false;
@@ -195,16 +217,26 @@ export default {
     removeAll() {
       //如果本来是空的,return,节省性能.
       if (!this.GoodsList.length) {
+        this.isSelectAll = false;
         return;
       }
       this.GoodsList = [];
-      window.localStorage.setItem("shopCarList", this.GoodsList);
+      this.$store.state.shopCarList = [];
+      window.localStorage.setItem("shopCarList", "[]");
       this.selectList = [];
+      window.localStorage.setItem("selectedGoods", "[]");
       this.isSelectAll = false;
     },
     //记住选中状态的函数,结算时要得到选中的商品再结算
-    getSelected() {
-      window.setItem("selectedGoods",JSON.stringify(this.selectList))
+    SelectedInit() {
+      this.selectList = [];
+      this.GoodsList.forEach(el => {
+        this.selectList.push(el.id);
+      });
+      window.localStorage.setItem(
+        "selectedGoods",
+        JSON.stringify(this.selectList)
+      );
     }
   },
   components: {
