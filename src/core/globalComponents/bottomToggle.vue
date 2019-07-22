@@ -9,7 +9,7 @@
         :class="{current:isSelect}"
         @click.native="selectCurrent(index)"
       >
-        <router-link :to="item.path" class="toggleLink" :class="{'current':index==isSelect}">
+        <router-link :to="item.path" class="toggleLink" :class="{'current':item.path == $route.path}">
           <p :class="item.iconfont" class="iconfont"></p>
           <p class="txt" v-text="item.name"></p>
         </router-link>

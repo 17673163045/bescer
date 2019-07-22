@@ -1,9 +1,11 @@
 <template>
   <div id="app">
-    <keep-alive>
-      <router-view v-if="$route.meta.keepAlive"></router-view>
-    </keep-alive>
-    <router-view v-if="!$route.meta.keepAlive"></router-view>
+    <div class="main">
+      <keep-alive>
+        <router-view v-if="$route.meta.keepAlive"></router-view>
+      </keep-alive>
+      <router-view v-if="!$route.meta.keepAlive"></router-view>
+    </div>
     <bottomToggle></bottomToggle>
   </div>
 </template>
@@ -18,9 +20,19 @@ export default {
 </script>
 
 <style lang="scss">
-.box {
-  width: 100px;
-  height: 100px;
-  background-color: red;
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+#app {
+  display:flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+.main{
+  height: 100%;
+  width: 100%;
 }
 </style>

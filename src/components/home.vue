@@ -1,28 +1,29 @@
 <template>
   <div id="home">
-    <!--这是顶部轮播图组件-->
-    <topbanner v-if="SwiperBannerList.length" :imgList="SwiperBannerList"></topbanner>
-    <!--这是广告组件-->
-    <ad></ad>
-    <!-- 这是商品列表组件 -->
-    <goodsList v-if="TopIconList.length" :imgList="TopIconList"></goodsList>
-    <!-- 这是通知组件 -->
-    <notice></notice>
-    <!-- 这是精品商品系列组件 -->
-    <finegoods v-if="CenterContentList.length" :imgList="CenterContentList"></finegoods>
-    <!-- 这是更多商品的入口图片组件 传参moreGoodsparams[0]-->
-    <moreGoods :ImgUrl="moreGoodsparams[0].ImgUrl"></moreGoods>
-    <!-- 这是一个共同的轮播图组件 传入SaleList[0]-->
-    <commonBanner v-if="SwiperBannerList.length" :imgList="SaleList[0].CakeList"></commonBanner>
-    <!-- 这是更多商品的入口图片组件 传参moreGoodsparams[1]-->
-    <moreGoods :ImgUrl="moreGoodsparams[1].ImgUrl"></moreGoods>
-    <!-- 这是一个共同的轮播图组件 传入SaleList[1]-->
-    <commonBanner v-if="SwiperBannerList.length" :imgList="SaleList[1].CakeList"></commonBanner>
-    <!-- 这是更多商品的入口图片组件 传参moreGoodsparams[2]-->
-    <moreGoods :ImgUrl="moreGoodsparams[2].ImgUrl"></moreGoods>
-    <!-- 这是一个共同的轮播图组件 传入SaleList[2]-->
-    <commonBanner v-if="SwiperBannerList.length" :imgList="SaleList[2].CakeList"></commonBanner>
-    <!-- 这是底部的导航栏 -->
+    <div class="main">
+      <!--这是顶部轮播图组件-->
+      <topbanner v-if="SwiperBannerList.length" :imgList="SwiperBannerList"></topbanner>
+      <!--这是广告组件-->
+      <ad></ad>
+      <!-- 这是商品列表组件 -->
+      <goodsList v-if="TopIconList.length" :imgList="TopIconList"></goodsList>
+      <!-- 这是通知组件 -->
+      <notice></notice>
+      <!-- 这是精品商品系列组件 -->
+      <finegoods v-if="CenterContentList.length" :imgList="CenterContentList"></finegoods>
+      <!-- 这是更多商品的入口图片组件 传参moreGoodsparams[0]-->
+      <moreGoods :ImgUrl="moreGoodsparams[0].ImgUrl"></moreGoods>
+      <!-- 这是一个共同的轮播图组件 传入SaleList[0]-->
+      <commonBanner v-if="SwiperBannerList.length" :imgList="SaleList[0].CakeList"></commonBanner>
+      <!-- 这是更多商品的入口图片组件 传参moreGoodsparams[1]-->
+      <moreGoods :ImgUrl="moreGoodsparams[1].ImgUrl"></moreGoods>
+      <!-- 这是一个共同的轮播图组件 传入SaleList[1]-->
+      <commonBanner v-if="SwiperBannerList.length" :imgList="SaleList[1].CakeList"></commonBanner>
+      <!-- 这是更多商品的入口图片组件 传参moreGoodsparams[2]-->
+      <moreGoods :ImgUrl="moreGoodsparams[2].ImgUrl"></moreGoods>
+      <!-- 这是一个共同的轮播图组件 传入SaleList[2]-->
+      <commonBanner v-if="SwiperBannerList.length" :imgList="SaleList[2].CakeList"></commonBanner>
+    </div>
   </div>
 </template>
 
@@ -81,7 +82,7 @@ export default {
         this.CenterContentList = data.CenterContentList; //矩形排列商品数据,许愿天使等..
         this.SaleList = this.$globalFns.getImgUrl(data.SaleList); //三个轮播图数据;
       });
-    },
+    }
   },
   //使用组件
   components: {
@@ -91,11 +92,14 @@ export default {
     notice,
     finegoods,
     moreGoods,
-    commonBanner,
+    commonBanner
   }
 };
 </script>
 
 
 <style lang="scss" scoped>
+.main{
+  margin-bottom:r(62)
+}
 </style>

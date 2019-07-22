@@ -5,7 +5,8 @@ Vue.use(Vuex)
 const state = {
   City: "上海",
   shopCarList: [],
-  selectedSize: ""
+  selectedSize: "",
+  islogin:""
 }
 const mutations = {
   //点击购物车小图标购买逻辑

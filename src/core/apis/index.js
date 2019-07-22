@@ -1,4 +1,6 @@
 import request from "./https"
+import mock from "@/core/mock"
+
 class Apis {
   //cnode的接口
   getTopics() {
@@ -74,6 +76,11 @@ class Apis {
       url: "/json1811.ashx",
       params
     })
+  }
+
+  //模拟登录接口
+  login(data){
+    return mock.post("/login",{data:data})
   }
 }
 export default new Apis()

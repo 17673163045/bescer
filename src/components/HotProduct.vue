@@ -40,6 +40,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#HotProduct{
+  margin-bottom:r(62)
+}
 .hotTitle {
   height: r(240);
   background-color: rgb(244, 244, 244);

@@ -27,6 +27,7 @@ export default {
   background-color: rgb(244, 244, 244);
   padding:r(30) 0;
   margin:0 auto;
+  margin-bottom:r(62)
 }
 .pricethrough {
   font-size: r(14);
